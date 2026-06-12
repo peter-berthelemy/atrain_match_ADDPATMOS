@@ -263,6 +263,23 @@ def parse_scenesfile_reshaped(filename):
     _datetime = datetime.strptime(date_s + time_s, '%Y%m%d%H%M')
     return satname, _datetime
 
+def parse_scenesfile_patmos(filename):
+    """
+    Parse patmos file:  # patmosx_v06r00_METOP-A_asc_d20100202_c20210730.nc
+    """
+    from datetime import datetime
+    import re
+    filename = os.path.basename(filename)
+    if not filename:
+        raise ValueError("No file %r" % filename)
+    match = re.match(r"patmosx_v\d{2}r\d{2}_([^_]+)_asc_d(\d{8})_c\d{8}\.nc", filename)
+    if not match:
+        raise ValueError("Couldn't parse patmos file %r" % filename)
+    satname, date_s = match.groups()
+    _datetime = datetime.strptime(date_s, '%Y%m%d')
+
+    return satname, _datetime
+
 
 def do_some_geo_obj_logging(GeoObj):
     import time
